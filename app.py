@@ -5,12 +5,12 @@ import os
 
 app = Flask(__name__)
 
-# MongoDB Atlas connection URI
+# Get Mongo URI from environment variable
 MONGO_URI = os.getenv("MONGO_URI")
 if not MONGO_URI:
     raise Exception("MONGO_URI environment variable not set")
 
-DB_NAME = "test"          # Your database name
+DB_NAME = "test"          # Your DB name
 COLLECTION_NAME = "songs" # Your collection name
 CSV_FILE = "mongodb_export.csv"
 
@@ -19,24 +19,24 @@ client = MongoClient(MONGO_URI)
 db = client[DB_NAME]
 collection = db[COLLECTION_NAME]
 
-# Function to get data from MongoDB (excluding password)
 def get_data():
-    data = list(collection.find({}, {"_id": 0, "password": 0}))
+    # Find all, exclude password, sort by _id ascending
+    data = list(collection.find({}, {"password": 0}).sort("_id", 1))
+    # Remove _id from each dict for clean output
+    for d in data:
+        d.pop("_id", None)
     return data
 
-# Route to render the table
 @app.route("/")
 def index():
     data = get_data()
     return render_template("index.html", data=data)
 
-# Route to get refreshed data in JSON
 @app.route("/refresh")
 def refresh():
     data = get_data()
     return jsonify(data)
 
-# Route to download CSV
 @app.route("/download")
 def download():
     data = get_data()

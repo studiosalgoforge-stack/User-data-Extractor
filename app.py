@@ -32,11 +32,6 @@ def index():
     data = get_data()
     return render_template("index.html", data=data)
 
-@app.route("/refresh")
-def refresh():
-    data = get_data()
-    return jsonify(data)
-
 @app.route("/download")
 def download():
     data = get_data()

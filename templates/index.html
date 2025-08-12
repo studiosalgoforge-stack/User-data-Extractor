@@ -17,10 +17,6 @@
          class="bg-gradient-to-r from-[#12D6C5] to-[#9D4EDD] text-white font-semibold px-4 py-2 rounded-md hover:opacity-90 transition flex items-center gap-2">
         Download CSV
       </a>
-      <button id="refreshBtn" 
-         class="bg-gradient-to-r from-[#12D6C5] to-[#9D4EDD] text-white font-semibold px-4 py-2 rounded-md hover:opacity-90 transition flex items-center gap-2">
-        Refresh Data
-      </button>
     </div>
 
     <div class="overflow-x-auto">
@@ -46,28 +42,5 @@
       </table>
     </div>
   </div>
-
-  <script>
-    document.getElementById("refreshBtn").addEventListener("click", function() {
-      fetch("/refresh")
-        .then(response => response.json())
-        .then(data => {
-          let tbody = document.querySelector("#dataTable tbody");
-          tbody.innerHTML = "";
-          data.forEach(row => {
-            let tr = document.createElement("tr");
-            tr.classList.add("hover:bg-gray-700");
-            for (let key in row) {
-              let td = document.createElement("td");
-              td.textContent = row[key];
-              td.className = "text-white/90 px-6 py-3 border-b border-gray-700";
-              tr.appendChild(td);
-            }
-            tbody.appendChild(tr);
-          });
-        });
-    });
-  </script>
-
 </body>
 </html>

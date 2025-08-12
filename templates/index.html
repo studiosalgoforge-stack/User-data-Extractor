@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Live MongoDB Data</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-r from-black to-gray-900 min-h-screen">
+
+  <div class="container mx-auto mt-8 px-4">
+    <h2 class="text-center text-white mb-6 text-3xl font-bold">
+      Live MongoDB Data
+    </h2>
+
+    <div class="flex justify-center mb-6 gap-4">
+      <a href="/download" 
+         class="bg-gradient-to-r from-[#12D6C5] to-[#9D4EDD] text-white font-semibold px-4 py-2 rounded-md hover:opacity-90 transition flex items-center gap-2">
+        Download CSV
+      </a>
+      <button id="refreshBtn" 
+         class="bg-gradient-to-r from-[#12D6C5] to-[#9D4EDD] text-white font-semibold px-4 py-2 rounded-md hover:opacity-90 transition flex items-center gap-2">
+        Refresh Data
+      </button>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table id="dataTable" class="min-w-full bg-gray-800 rounded-lg overflow-hidden">
+        <thead>
+          <tr>
+            {% if data and data[0] %}
+              {% for key in data[0].keys() %}
+                <th class="text-left text-xl ext-4xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent font-bold uppercase px-6 py-3 border-b border-gray-700">{{ key }}</th>
+              {% endfor %}
+            {% endif %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in data %}
+            <tr class="hover:bg-gray-700">
+              {% for value in row.values() %}
+                <td class="text-white/90 px-6 py-3 border-b border-gray-700">{{ value }}</td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("refreshBtn").addEventListener("click", function() {
+      fetch("/refresh")
+        .then(response => response.json())
+        .then(data => {
+          let tbody = document.querySelector("#dataTable tbody");
+          tbody.innerHTML = "";
+          data.forEach(row => {
+            let tr = document.createElement("tr");
+            tr.classList.add("hover:bg-gray-700");
+            for (let key in row) {
+              let td = document.createElement("td");
+              td.textContent = row[key];
+              td.className = "text-white/90 px-6 py-3 border-b border-gray-700";
+              tr.appendChild(td);
+            }
+            tbody.appendChild(tr);
+          });
+        });
+    });
+  </script>
+
+</body>
+</html>

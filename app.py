@@ -11,7 +11,7 @@ if not MONGO_URI:
     raise Exception("MONGO_URI environment variable not set")
 
 DB_NAME = "production"          # Your DB name
-COLLECTION_NAME = "leads" # Your collection name
+COLLECTION_NAME = "users" # Your collection name
 CSV_FILE = "mongodb_export.csv"
 
 # Connect to MongoDB

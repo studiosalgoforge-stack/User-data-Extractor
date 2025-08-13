@@ -10,8 +10,8 @@ MONGO_URI = os.getenv("MONGO_URI")
 if not MONGO_URI:
     raise Exception("MONGO_URI environment variable not set")
 
-DB_NAME = "test"          # Your DB name
-COLLECTION_NAME = "songs" # Your collection name
+DB_NAME = "production"          # Your DB name
+COLLECTION_NAME = "users" # Your collection name
 CSV_FILE = "mongodb_export.csv"
 
 # Connect to MongoDB
